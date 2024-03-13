@@ -22,10 +22,6 @@ async def on_message(message):
     if message.author == client.user:
         return
 
-    # 이모지, 이모티콘, 이미지 또는 다른 봇에 반응하지 않도록 필터링
-    if not message.content or message.author.bot or message.attachments:
-        return
-
     # 번역할 문장
     original_message = message.content
 
