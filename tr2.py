@@ -1,9 +1,8 @@
 import discord
+import os
 import requests
 import json
 
-# 디스코드 봇 토큰
-TOKEN = 'MTIxNzMxNjkzNjY2OTU5NzczNg.GgHAlP.BqhHOMKwn1_h8kQ5SAl0QQGbn-4TMk0tN914ww'
 # Deepl API 키
 DEEPL_API_KEY = '6eb802fa-ae94-4f9e-8c72-72d2948fed71'
 # Deepl API 엔드포인트
@@ -67,4 +66,5 @@ def translate_message(text, source_lang, target_lang):
         return None
 
 # 디스코드 봇 실행
-client.run(TOKEN)
+access_token = os.environ['BOT_TOKEN']
+client.run(access_token)
