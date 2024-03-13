@@ -3,6 +3,11 @@ import os
 import requests
 import json
 
+# Deepl API 키
+DEEPL_API_KEY = '6eb802fa-ae94-4f9e-8c72-72d2948fed71'
+# Deepl API 엔드포인트
+DEEPL_API_ENDPOINT = 'https://api.deepl.com/v2/translate'
+
 # 디스코드 클라이언트 생성
 intents = discord.Intents.all()
 client = discord.Client(intents=intents)
@@ -17,12 +22,8 @@ async def on_message(message):
     if message.author == client.user:
         return
 
-    # 이모티콘에 반응하지 않도록 필터링
-    if message.content == "":
-        return
-
-    # 메시지가 이미지를 포함하는 경우 무시
-    if message.attachments:
+    # 이모지, 이모티콘, 이미지 또는 다른 봇에 반응하지 않도록 필터링
+    if not message.content or message.author.bot or message.attachments:
         return
 
     # 번역할 문장
@@ -67,7 +68,7 @@ def translate_message(text, source_lang, target_lang):
     else:
         print("구그리가 당신의 언어를 이해하지 못했어요!:", response.status_code)
         return None
-        
+
 # 디스코드 봇 실행
 access_token = os.environ['BOT_TOKEN']
 client.run(access_token)
