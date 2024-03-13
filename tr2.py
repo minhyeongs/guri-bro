@@ -22,6 +22,10 @@ async def on_message(message):
     if message.author == client.user:
         return
 
+    # 이모지, 이모티콘, 이미지 또는 다른 봇에 반응하지 않도록 필터링
+    if message.content == "" and len(message.attachments) == 0:
+        return
+
     # 번역할 문장
     original_message = message.content
 
@@ -64,7 +68,7 @@ def translate_message(text, source_lang, target_lang):
     else:
         print("구그리가 당신의 언어를 이해하지 못했어요!:", response.status_code)
         return None
-
+        
 # 디스코드 봇 실행
 access_token = os.environ['BOT_TOKEN']
 client.run(access_token)
