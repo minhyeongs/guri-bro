@@ -1,5 +1,4 @@
 import discord
-import os
 import requests
 import json
 from langdetect import detect
@@ -41,9 +40,16 @@ async def on_message(message):
             target_langs = ['es', 'en']
 
         # 번역 및 전송
+        translated_texts = []
         for lang in target_langs:
             translated_text = translate_message(original_message, detected_lang, lang)
-            await message.channel.send(f"Translated ({lang}): {translated_text}")
+            if translated_text:
+                translated_texts.append(f"Translated ({lang}): {translated_text}")
+
+        # 번역 결과와 함께 상대방의 프로필과 닉네임을 포함하여 메시지 전송
+        if translated_texts:
+            translated_message = "\n".join(translated_texts)
+            await message.channel.send(f"{message.author.mention} 님이 보낸 메시지:\n{translated_message}")
 
 def translate_message(text, source_lang, target_lang):
     # Deepl API에 보낼 요청 데이터
