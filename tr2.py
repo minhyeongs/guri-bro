@@ -22,26 +22,28 @@ async def on_message(message):
     if message.author == client.user:
         return
 
-    # 번역할 문장
-    original_message = message.content
+    # 메시지가 텍스트이고 "https://tenor.com"이 포함되지 않은 경우에만 번역 수행
+    if message.content and not has_tenor_link(message):
+        # 번역할 문장
+        original_message = message.content
 
-    # Embed 메시지 생성
-    embed = discord.Embed(title="구그리가 번역했어요!", color=0x007199)  # 초록색 Embed
+        # 번역 결과를 담을 문자열 초기화
+        translated_text = ""
 
-    # 한국어 -> 스페인어 번역
-    translated_message = translate_message(original_message, 'ko', 'es')
-    embed.add_field(name="Español :", value=translated_message, inline=False)
+        # 한국어 -> 스페인어 번역
+        translated_message = translate_message(original_message, 'ko', 'es')
+        translated_text += f"Español : {translated_message}\n"
 
-    # 스페인어 -> 한국어 번역
-    translated_message = translate_message(original_message, 'es', 'ko')
-    embed.add_field(name="Korean :", value=translated_message, inline=False)
+        # 스페인어 -> 한국어 번역
+        translated_message = translate_message(original_message, 'es', 'ko')
+        translated_text += f"Korean : {translated_message}\n"
 
-    # 한국어 -> 영어 번역
-    translated_message = translate_message(original_message, 'ko', 'en')
-    embed.add_field(name="English :", value=translated_message, inline=False)
+        # 한국어 -> 영어 번역
+        translated_message = translate_message(original_message, 'ko', 'en')
+        translated_text += f"English : {translated_message}\n"
 
-    # Embed 메시지를 디스코드로 전송
-    await message.channel.send(embed=embed)
+        # 디스코드로 번역 결과 전송
+        await message.channel.send(translated_text)
 
 def translate_message(text, source_lang, target_lang):
     # Deepl API에 보낼 요청 데이터
@@ -62,8 +64,12 @@ def translate_message(text, source_lang, target_lang):
         # 번역된 텍스트 반환
         return translation_result['translations'][0]['text']
     else:
-        print("구그리가 당신의 언어를 이해하지 못했어요!:", response.status_code)
+        print("구글이 당신의 언어를 이해하지 못했어요!:", response.status_code)
         return None
+
+def has_tenor_link(message):
+    # 메시지 내용에 "https://tenor.com"이 포함되어 있는지 확인
+    return "https://tenor.com" in message.content
 
 # 디스코드 봇 실행
 access_token = os.environ['BOT_TOKEN']
