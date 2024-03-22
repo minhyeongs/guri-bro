@@ -18,8 +18,8 @@ async def on_ready():
 
 @client.event
 async def on_message(message):
-    # 봇이 보낸 메시지는 무시
-    if message.author == client.user:
+    # 봇이 보낸 메시지 또는 봇의 반응은 무시
+    if message.author == client.user or message.author.bot:
         return
 
     # 메시지가 텍스트이고 "https://tenor.com"이 포함되지 않은 경우에만 번역 수행
