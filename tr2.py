@@ -1,5 +1,4 @@
 import discord
-import os
 import requests
 import json
 from langdetect import detect
@@ -80,4 +79,4 @@ def has_tenor_link(message):
 
 # 디스코드 봇 실행
 access_token = os.environ['BOT_TOKEN']
-client.run(access_token)
+Client.run(access_token)
