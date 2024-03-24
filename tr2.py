@@ -1,7 +1,6 @@
 import discord
 import os
 import requests
-import json
 from langdetect import detect
 
 # Deepl API 키
