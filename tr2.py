@@ -23,8 +23,8 @@ async def on_message(message):
     if message.author == client.user or message.author.bot:
         return
 
-    # 메시지가 텍스트이고 "https://tenor.com"이 포함되지 않은 경우에만 번역 수행
-    if message.content and not has_tenor_link(message):
+    # 메시지가 텍스트인 경우에만 번역 수행
+    if message.content:
         # 번역할 문장
         original_message = message.content
 
@@ -73,10 +73,6 @@ def translate_message(text, source_lang, target_lang):
     else:
         print("봇이 당신의 언어를 이해하지 못했어요!:", response.status_code)
         return None
-
-def has_tenor_link(message):
-    # 메시지 내용에 "https://tenor.com"이 포함되어 있는지 확인
-    return "https://tenor.com" in message.content
 
 # 디스코드 봇 실행
 access_token = os.environ['BOT_TOKEN']
