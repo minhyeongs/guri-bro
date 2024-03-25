@@ -1,8 +1,6 @@
 import discord
-import os
 import requests
 import json
-from langdetect import detect
 
 # Deepl API 키
 DEEPL_API_KEY = '6eb802fa-ae94-4f9e-8c72-72d2948fed71'
@@ -23,27 +21,18 @@ async def on_message(message):
     if message.author == client.user or message.author.bot:
         return
 
+    # 상대방의 언어를 영어, 한국어, 스페인어로만 번역
+    target_langs = ['EN', 'KO', 'ES']
+
     # 메시지가 텍스트인 경우에만 번역 수행
     if message.content:
         # 번역할 문장
         original_message = message.content
 
-        # 메시지 언어 감지
-        detected_lang = detect(original_message)
-
-        # 번역할 대상 언어 설정
-        target_langs = []
-        if detected_lang == 'en':
-            target_langs = ['ko', 'es']
-        elif detected_lang == 'es':
-            target_langs = ['ko', 'en']
-        elif detected_lang == 'ko':
-            target_langs = ['es', 'en']
-
         # 번역 및 전송
         translated_texts = []
         for lang in target_langs:
-            translated_text = translate_message(original_message, detected_lang, lang)
+            translated_text = translate_message(original_message, lang)
             if translated_text:
                 translated_texts.append(f"Translated ({lang}): {translated_text}")
 
@@ -52,12 +41,11 @@ async def on_message(message):
             translated_message = "\n".join(translated_texts)
             await message.channel.send(f"{message.author.mention} 님이 보낸 메시지:\n{translated_message}")
 
-def translate_message(text, source_lang, target_lang):
+def translate_message(text, target_lang):
     # Deepl API에 보낼 요청 데이터
     data = {
         'auth_key': DEEPL_API_KEY,
         'text': text,
-        'source_lang': source_lang,
         'target_lang': target_lang
     }
 
